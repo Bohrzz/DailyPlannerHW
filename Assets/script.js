@@ -1,43 +1,66 @@
 
 
 
-$(document).ready(function () {
-  
-  
+//$(document).ready(function () {
+
+
   const todaysDate = moment();
-  
+
   $("#currentDay").text(todaysDate.format("MMM Do, YYYY"));
-  
-  const timeBlock = $('.row');
-  
+
+  const timeBlock = $(".row");
+
   const currentHour = moment().hours();
 
   const inputTasks = JSON.parse(localStorage.getItem("stored-tasks")) || [];
+  console.log(inputTasks);
 
   timeBlock.each(function (index) {
 
-    console.log(this, index)
+
 
     const realNum = parseInt(this.id)
     const content = this.querySelector(".col-9")
+    console.log(content)
 
-
+    // Past //
     if (currentHour > realNum) {
 
-      content.classList.add("past");
+      $(this).removeClass("present");
+      $(this).removeClass("future");
 
+      $(this).addClass("past");
+
+
+      // Present //
+    } else if (currentHour == realNum) {
+
+      $(this).removeClass("past");
+
+      $(this).removeClass("future");
+
+      $(this).addClass("present");
+
+
+
+      // Future //
     } else if (currentHour < realNum) {
 
-      content.classList.add("future");
+      $(this).removeClass("past");
 
-    } else {
+      $(this).removeClass("present");
 
-      content.classList.add("present");
+      $(this).addClass("future");
 
     }
     this.addEventListener('submit', contentSubmit)
 
-    console.log(this);
+      //if (inputTasks.length < 9 ){
+
+      //$(this).textContent(Null)
+
+    
+
     content.value = inputTasks[index];
   });
 
@@ -46,17 +69,19 @@ $(document).ready(function () {
 
     event.preventDefault();
 
-    console.log(event.target)
+    console.log(event.target.querySelector("input").value)
 
-    const index = parseInt(event.target.id) - 9;
+    const index = parseInt(event.target.id)-9;
 
-    const dailyTask = $(".col-9").val()
+
+    const dailyTask = (event.target.querySelector("input").value);
 
     console.log('dailyTask', dailyTask)
+    console.log(index);
     inputTasks[index] = dailyTask;
 
     localStorage.setItem("stored-tasks", JSON.stringify(inputTasks));
   }
 
 
-}) 
+//}) 
